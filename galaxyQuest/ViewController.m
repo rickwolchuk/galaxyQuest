@@ -8,7 +8,11 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController ()<UIScrollViewDelegate>
+@property (strong, nonatomic) IBOutlet UIScrollView *myScrollView;
+@property UIImageView *imageView;
+@property NSArray *imageViews;
+
 
 @end
 
@@ -17,13 +21,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    //self.imageView = [[UIImageView alloc] initWithImage:
+                             // [UIImage imageNamed:@"1.jpg"]];
+    CGFloat width = 0.0;
+    self.imageViews = @[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"1.jpg"]],
+                        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"2.jpg"]],
+                        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"3.jpg"]]];
+
+                        for (UIImageView *imageView in self.imageViews){
+                            [self.myScrollView addSubview:imageView];
+                            imageView.frame = CGRectMake(width, 0, self.view.frame.size.width, self.view.frame.size.height);
+                            imageView.contentMode = UIViewContentModeScaleAspectFit;
+                            width += imageView.frame.size.width;
+
+
 }
 
-- (void)didReceiveMemoryWarning
+
+    [self.myScrollView addSubview:self.imageView];
+    self.imageView.frame = self.view.frame;
+    self.myScrollView.contentSize = self.imageView.frame.size;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.myScrollView.minimumZoomScale = 1.0;
+    self.myScrollView.maximumZoomScale = 10.0;
+    self.myScrollView.delegate = self;
+}
+
+#pragma mark UIScrollView Delegate
+
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return self.imageView;
 }
 
 @end
